@@ -1,0 +1,9 @@
+[package]
+name = "lin-collections"
+version = "0.1.0"
+authors = ["AllowFlame <closelogin@hanmail.net>"]
+edition = "2018"
+
+[lib]
+name = "lin_collections"
+path = "src/lib.rs"
