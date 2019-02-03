@@ -2,11 +2,16 @@ pub mod coupled_vec;
 
 mod coupled_test;
 
+use std::collections::{VecDeque};
+
 pub trait CoupledCollection {
     type Collection: IntoIterator;
 
     fn is_empty(&self) -> bool;
     fn len(&self) -> usize;
+
+    fn coupled_collection(self) -> VecDeque<Self::Collection>;
+    fn flatten(self) -> Self::Collection;
     
     fn front(&self) -> Option<&Self::Collection>;
     fn pop_front(&mut self) -> Option<Self::Collection>;

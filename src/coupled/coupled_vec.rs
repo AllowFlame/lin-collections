@@ -1,4 +1,5 @@
 use std::collections::{VecDeque};
+use std::iter::Flatten;
 
 use crate::coupled::{CoupledCollection, IntoCoupledCollection};
 
@@ -19,11 +20,11 @@ impl<T> CoupledVec<T> {
         use std::borrow::BorrowMut;
 
         let unit_len = self.unit_len;
-        let mut coupled_vec = self.coupled_vec.borrow_mut();
+        let coupled_vec = self.coupled_vec.borrow_mut();
         let mut flat_index: usize = 0;
         for item in flat_vec {
             let remainder = flat_index % unit_len;
-            let mut inner = match remainder {
+            let inner = match remainder {
                 0 => {
                     let inner_vec: Vec<T> = Vec::new();
                     coupled_vec.push_back(inner_vec);
@@ -74,7 +75,7 @@ impl<T> IntoIterator for CoupledVec<T> {
     type IntoIter = IntoIter<Self::Item>;
 
     #[inline]
-    fn into_iter(mut self) -> IntoIter<Self::Item> {
+    fn into_iter(self) -> IntoIter<Self::Item> {
         IntoIter {
             inner: self.coupled_vec,
         }
@@ -102,6 +103,14 @@ impl<T> CoupledCollection for CoupledVec<T> {
         };
 
         (self.unit_len * outer_len) - (self.unit_len - last_collection_len)
+    }
+
+    fn coupled_collection(self) -> VecDeque<Vec<T>> {
+        self.coupled_vec
+    }
+
+    fn flatten(self) -> Vec<T> {
+        self.into_iter().flatten().collect::<Vec<T>>()
     }
 
     fn front(&self) -> Option<&Vec<T>> {
