@@ -1,16 +1,16 @@
-pub mod coupled_vec;
+pub mod folded_vec;
 
-mod coupled_test;
+mod folded_test;
 
 use std::collections::{VecDeque};
 
-pub trait CoupledCollection {
+pub trait FoldedCollection {
     type Collection: IntoIterator;
 
     fn is_empty(&self) -> bool;
     fn len(&self) -> usize;
 
-    fn coupled_collection(self) -> VecDeque<Self::Collection>;
+    fn folded_collection(self) -> VecDeque<Self::Collection>;
     fn flatten(self) -> Self::Collection;
     
     fn front(&self) -> Option<&Self::Collection>;
@@ -21,8 +21,8 @@ pub trait CoupledCollection {
     fn clear(&mut self);
 }
 
-pub trait IntoCoupledCollection {
-    type Collection: CoupledCollection;
+pub trait FoldableCollection {
+    type Collection: FoldedCollection;
 
-    fn into_coupled(self, unit_len: usize) -> Self::Collection;
+    fn fold(self, unit_len: usize) -> Self::Collection;
 }
