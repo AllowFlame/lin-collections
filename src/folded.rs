@@ -1,5 +1,4 @@
-pub mod folded_vec;
-
+mod folded_vec;
 mod folded_test;
 
 use std::collections::{VecDeque};
